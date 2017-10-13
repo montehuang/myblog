@@ -12,7 +12,7 @@ class Config:
 		pass
 
 class DevelopmentConfig(Config):
-	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:0270@127.0.0.1:3306/flasky?charset=utf8'
+	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL')
 	DEBUG = True
 
 class TestingConfig(Config):
