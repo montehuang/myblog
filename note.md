@@ -1,0 +1,3 @@
+#数据库
+*添加数据库操作命令使用Migrate的add_command,第一个参数是想使用的命令名，第二个参数是flask-migrate的MigrateCommand
+*当数据库模型变化的使用，使用flask-migrate做数据库的更新，分别执行migrate和upgrade。
