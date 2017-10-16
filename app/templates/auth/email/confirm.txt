@@ -1,0 +1,6 @@
+Dear {{ user.username }}
+Welcome to my blog!
+To confirm your account please click one the following link:
+{{ url_for('auth.confirm', token = token, _external = True_)}}
+Sincerely,
+Note:replies to this email address are not monitored.
