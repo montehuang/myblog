@@ -23,7 +23,7 @@ class Config:
 		pass
 
 class DevelopmentConfig(Config):
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL')
+	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///'+basedir+'/flasky.db'
 	DEBUG = True
 
 class TestingConfig(Config):
