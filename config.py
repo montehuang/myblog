@@ -1,3 +1,5 @@
+#coding:utf8
+
 import os
 import pymysql
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -14,10 +16,7 @@ class Config:
 	MAIL_PASSWORD = os.environ.get('FLASKY_MAIL_PASSWORD')
 	FLASKY_MAIL_SENDER = os.environ.get('FLASKY_MAIL_USERNAME')
 	FLASKY_MAIL_SUBJECT_PREFIX = 'monte blog'
-	# MAIL_USERNAME = "865824187@qq.com"
-	# MAIL_PASSWORD = "lecydmmxbsqtbbij"
-	MAIL_USERNAME = 'hqzmonte@sina.com'
-	MAIL_PASSWORD = 'hqz032340'
+	FLASKY_ADMIN = os.environ.get('FLASKY_MAIL_USERNAME')
 	@staticmethod
 	def init_app(app):
 		pass
