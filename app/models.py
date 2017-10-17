@@ -78,7 +78,7 @@ class User(UserMixin, db.Model):
 		return True
 
 	def __repr__(self):
-		return '<User %r>' % self.
+		return '<User %r>' % self.username
 
 	def __init__(self, **kwargs):
 		super(User, self).__init__(**kwargs)
@@ -90,12 +90,12 @@ class User(UserMixin, db.Model):
 
 	def can(self, permission):
 		return self.role is not None \
-			(self.role.permission & permission) == permission
+			and (self.role.permission & permission) == permission
 
 	def is_administrator(self):
 		return self.can(Permission.ADMINISTRATOR)
 
-def AnonymousUser(AnonymousUserMixin):
+class AnonymousUser(AnonymousUserMixin):
 	def can(self, permission):
 		return False
 
