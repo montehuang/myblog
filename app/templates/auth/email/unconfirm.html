@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div>
+Dear <b>{{ current_user.username }}</b>
+<br/>
+You have not confirmed your account yet.
+<br/>
+Beform you can access this sit you need to confirm your account.
+<br/>
+<p>Need another confirmation email?<a href="{{ url_for('auth.resend_confirmed', token = token, _external = True)}}">Click here.</a></p>
+</div>
+{% endblock %}

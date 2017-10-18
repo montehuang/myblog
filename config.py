@@ -12,8 +12,8 @@ class Config:
 	MAIL_PORT = 25               # 邮件服务器端口
 	MAIL_USE_TLS = True          # 启用 TLS
 	# MAIL_USE_SSL = True          # 启用 TLS
-	MAIL_USERNAME = 'hqzmonte@sina.com'
-	MAIL_PASSWORD = 'hqz032340'
+	MAIL_USERNAME = os.environ.get('FLASKY_MAIL_USERNAME')
+	MAIL_PASSWORD = os.environ.get('FLASKY_MAIL_PASSWORD')
 	FLASKY_MAIL_SENDER = os.environ.get('FLASKY_MAIL_USERNAME') or 'hqzmonte@sina.com'
 	FLASKY_MAIL_SUBJECT_PREFIX = 'monte blog'
 	FLASKY_ADMIN = os.environ.get('FLASKY_MAIL_USERNAME') 
