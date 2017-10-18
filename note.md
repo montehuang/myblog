@@ -1,6 +1,7 @@
 #数据库
 *添加数据库操作命令使用Migrate的add_command,第一个参数是想使用的命令名，第二个参数是flask-migrate的MigrateCommand
 *当数据库模型变化的使用，使用flask-migrate做数据库的更新，分别执行migrate和upgrade。
+*定义数据库模型时候，参数backref=‘example’是向相应的模型里面添加一个example的属性，并且获取到的是模型对象。index设为True是为了给那一列创建索引，提升查询速度
 
 #发送邮件
 *使用flask-mail发送邮件注意点：
@@ -24,3 +25,14 @@
 
 #flask-login
 *提供了用户登陆，登出等功能
+
+#CSS
+*head中的link文件只被加载一次，刷新无效。因为上线以后，这部分东西一般是不需要改动的。开发的时候可以清除Chrome缓存的图片和文件，让link重新加载，就可以刷新了
+
+#用户头像
+*考虑使用Gravatar网站生成。
+*需要用到md5码，使用python标准库hashlib来生成
+*因为生成md5码是个CPU密集型操作，所以考虑将生成的md5码进行保存到数据库中，当email改变时再修改
+
+#模板
+*当不同的页面用到相同html的模块，可以把那部分独立写成一个html文件，并在需要引用的地方使用include()指令。e.g：{% include '_posts.html' %}，达到重用的目的
