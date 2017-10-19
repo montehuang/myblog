@@ -1,3 +1,6 @@
+#coding:utf8
+
+# 文件执行前需要先执行pip3 freeze >requirements/common.txt
 import os
 Config = {
 	"dev":["ForgeryPy"],
