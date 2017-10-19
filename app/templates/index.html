@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% import "_macros.html" as macros %}
 {% block title %}all posts{% endblock %}
 {% block page_content %}
 <div class="page-header">
@@ -12,4 +12,7 @@
 	{% endif %}
 </div>
 {% include '_posts.html' %}
+<div class="pagination col-md-12 col-sm-offset-2 text-center">
+	{{ macros.pagination_widget(pagination, '.index') }}
+</div>
 {% endblock %}
