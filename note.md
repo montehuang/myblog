@@ -2,6 +2,8 @@
 *添加数据库操作命令使用Migrate的add_command,第一个参数是想使用的命令名，第二个参数是flask-migrate的MigrateCommand
 *当数据库模型变化的使用，使用flask-migrate做数据库的更新，分别执行migrate和upgrade。
 *定义数据库模型时候，参数backref=‘example’是向相应的模型里面添加一个example的属性，并且获取到的是模型对象。index设为True是为了给那一列创建索引，提升查询速度
+* 一台PC使用sqlite，另一台使用mysql等，推送到git，在拉下来，重新做db migrate会出错 alembic.util.exc.CommandError: Can't locate revision identified by，
+是因为sqlite会生成一个alembic_version的表，产生了冲突，解决方法是删掉alembic_version的所有数据
 
 #发送邮件
 *使用flask-mail发送邮件注意点：
