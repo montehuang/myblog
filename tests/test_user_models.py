@@ -56,3 +56,35 @@ class UserModelTestCase(unittest.TestCase):
 	def test_anonymous_user(self):
 		u = AnonymousUser()
 		self.assertFalse(u.can(Permission.FOLLOW))
+
+	# 测试关注用户
+	def test_follow_user(self):
+		u1 = User.query.filter_by(username = 'u1').first()
+		u2 = User.query.filter_by(username = 'u2').first()
+		if u1 is None:
+			u1 = User(username = 'u1')
+			db.session.add(u1)
+			db.session.commit()
+		if u2 is None:
+			u2 = User(username = 'u2')
+			db.session.add(u2)
+			db.session.commit()
+		self.assertTrue(u1.follow(u2))
+
+	# 测试取消关注
+	def test_unfollow_user(self):
+		u1 = User.query.filter_by(username = 'u1').first()
+		u2 = User.query.filter_by(username = 'u2').first()
+		self.assertTrue(u1.unfollow(u2))
+
+	# 测试是否关注某人
+	def test_is_following_user(self):
+		u1 = User.query.filter_by(username = 'u1').first()
+		u2 = User.query.filter_by(username = 'u2').first()
+		self.assertTrue(u1.is_following(u2))
+
+	# 测试是否被某人关注
+	def test_is_followed_by_user(self):
+		u1 = User.query.filter_by(username = 'u1').first()
+		u2 = User.query.filter_by(username = 'u2').first()
+		self.assertTrue(u2.is_followed(u1))
