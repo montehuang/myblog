@@ -11,6 +11,19 @@ from datetime import datetime
 import bleach
 from markdown import markdown
 
+# 去除sqlite产生的alembic_version数据库里的version_num数据
+class Alembic(db.Model):
+    __tablename__ = 'alembic_version'
+    version_num = db.Column(db.String(32), primary_key=True, nullable=False)
+
+    @staticmethod
+    def clear_A():
+        for a in Alembic.query.all():
+            print(a.version_num)
+            db.session.delete(a)
+        db.session.commit()
+        print('======== data in Table: Alembic cleared!')
+
 class Permission:
 	FOLLOW = 0x01
 	COMMENT = 0x02
@@ -82,6 +95,18 @@ class User(UserMixin, db.Model):
 				self.role = Role.query.filter_by(default=True).first()
 		if self.email is not None and self.avatar_hash is None:
 			self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+		# 关注自己
+		self.follow(self)
+
+	# 让所有用户关注自己
+	@staticmethod
+	def add_self_follow():
+		for user in User.query.all():
+			if not user.is_following(user):
+				user.follow(user)
+				db.session.add(user)
+
+		db.session.commit()
 
 	def change_email(self, email):
 		if email is None:
@@ -166,6 +191,12 @@ class User(UserMixin, db.Model):
 		hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
 		return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url = url, hash = hash, size = size, default =
 			default, rating = rating)
+
+	# 返回关注的用户博客
+	@property
+	def followed_posts(self):
+		return Post.query.join(Follow, Follow.followed_id == Post.author_id) \
+			.filter(Follow.follower_id == self.id)
 
 	# 生成大量的假的用户
 	@staticmethod
