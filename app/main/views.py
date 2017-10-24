@@ -114,7 +114,7 @@ def post(id):
 	pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
 		page, per_page = current_app.config['FLASKY_COMMENTS_PER_PAGE'], error_out = False)
 	comments = pagination.items
-	return render_template('post.html', posts=[post], comments = comments, pagination = pagination)
+	return render_template('post.html', posts=[post], form = form, comments = comments, pagination = pagination)
 
 @main.route('/edit/<int:id>', methods = ['GET', 'POST'])
 def edit_post(id):

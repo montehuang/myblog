@@ -82,7 +82,7 @@ class User(UserMixin, db.Model):
 		backref = db.backref('follower', lazy = 'joined'), lazy = 'dynamic', cascade = 'all, delete-orphan')
 	followers = db.relationship('Follow', foreign_keys = [Follow.followed_id],
 		backref = db.backref('followed', lazy = 'joined'), lazy = 'dynamic', cascade = 'all, delete-orphan')
-	comments = db.relationship('Comment', backref = 'user', lazy = 'dynamic')
+	comments = db.relationship('Comment', backref = 'author', lazy = 'dynamic')
 	def __repr__(self):
 		return '<User %r>' % self.username
 
