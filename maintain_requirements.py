@@ -3,7 +3,8 @@
 # 文件执行前需要先执行pip3 freeze >requirements/common.txt
 import os
 Config = {
-	"dev":["ForgeryPy"],
+	"dev":["ForgeryPy", "pygments", "certifi", "chardet", 
+			"colorama", "httpie", "idna", "requests", "urllib3"],
 	"produce":[]
 }
 current_dir = os.getcwd()

@@ -1,5 +1,8 @@
+#coding:utf8
+
 from ..models import Permission
 from .errors import forbidden
+from functools import wraps
 def permission_required(permission):
 	def decorator(f):
 		@wraps(f)

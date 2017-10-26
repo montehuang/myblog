@@ -1,7 +1,7 @@
 from flask_httpauth import HTTPBasicAuth
 from ..models import AnonymousUser, User
 from .errors import forbidden, unauthorized
-from flask import jsonify
+from flask import jsonify, g
 from . import api
 
 auth = HTTPBasicAuth()
@@ -9,7 +9,7 @@ auth = HTTPBasicAuth()
 @api.before_request
 @auth.login_required
 def before_request():
-	if not g.current_user.is_annoymous and \
+	if not g.current_user.is_anonymous and \
 		not g.current_user.confirmed:
 		return forbidden('Unconfirmed account')
 
@@ -20,14 +20,14 @@ def auth_error():
 # 使用密码或者是token认证
 @auth.verify_password
 def verify_password(email_or_token, password):
-	if email == '':
+	if email_or_token == '':
 		g.current_user = AnonymousUser()
 		return True
-	if password = '':
+	if password == '':
 		g.current_user = User.verify_auth_token(email_or_token)
 		g.token_used = True
 		return g.current_user is not None
-	user = User.query.filter_by(email = email).first()
+	user = User.query.filter_by(email = email_or_token).first()
 	if not user:
 		return False
 	g.current_user = user
@@ -36,7 +36,7 @@ def verify_password(email_or_token, password):
 
 @api.route('/token')
 def get_token():
-	if g.current_user.is_annoymous or g.token_used:
+	if g.current_user.is_anonymous or g.token_used:
 		return unauthorized('Invalid credetials.')
 	return jsonify({'token': g.current_user.generate_auth_token(expiration=3600), 'expiration': 3600})
 
