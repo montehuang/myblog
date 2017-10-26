@@ -1,0 +1,11 @@
+<div>
+Dear <b>{{ user.username }}</b>
+<br/>
+Welcome to my blog!
+<br/>
+To confirm your account please click one the following link:
+{{ url_for('auth.confirm', token = token, _external = True_)}}
+<br/>
+Sincerely,
+Note:replies to this email address are not monitored.
+</div>

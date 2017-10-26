@@ -3,13 +3,14 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin, AnonymousUserMixin
-from flask import current_app, request
+from flask import current_app, request, url_for
 from . import login_manager
 from . import db
 import hashlib
 from datetime import datetime
 import bleach
 from markdown import markdown
+from app.exceptions import ValidationError
 
 # 去除sqlite产生的alembic_version数据库里的version_num数据
 class Alembic(db.Model):
@@ -98,6 +99,16 @@ class User(UserMixin, db.Model):
 		# 关注自己
 		self.follow(self)
 
+	def to_json(self):
+		json_user = {
+			'url' : url_for('api.get_user', id = self.id, _external = True),
+			'username' : self.username,
+			'member_since' : self.member_since,
+			'last_seen' : self.last_seen,
+			'posts' : url_for('api.get_user_posts', id = self.id, _external = True),
+			'followed_posts' : url_for('api.get_user_followed_posts', id = self.id, _external = True),
+			'post_count' : self.posts.count()
+		}
 	# 让所有用户关注自己
 	@staticmethod
 	def add_self_follow():
@@ -143,6 +154,20 @@ class User(UserMixin, db.Model):
 		self.confirmed = True
 		db.session.add(self)
 		return True
+
+	# 生成认证用的token
+	def generate_auth_token(self, expiration = 3600):
+		return self.generate_confirmation_token(expiration)
+
+	# 取得某个token对应的用户
+	@staticmethod
+	def verify_auth_token(token):
+		s = Serializer(current_app.config['SECRET_KEY'])
+		try:
+			data = s.loads(token)
+		except:
+			return None
+		return User.query.get(data['id'])
 
 	# 关注其他人
 	def follow(self, user):
@@ -266,6 +291,25 @@ class Post(db.Model):
 		target.body_html = bleach.linkify(bleach.clean(
 			markdown(value, output_format = 'html'), tags = allowed_tags, strip = True))
 
+	# 转化成json
+	def to_json(self):
+		json_post = {
+			'url' : url_for('api.get_post', id = self.id, _external = True),
+			'body' : self.body,
+			'body_html' : self.body_html,
+			'timestamp' : self.timestamp,
+			'author' : url_for('api.get_user', id = self.author_id, _external = True),
+			'comments' : url_for('api.get_post_comments', id = self.id, _external = True),
+			'comment_count' : self.comments.count()
+		}
+		return json_post
+	# json转换成博客内容
+	@staticmethod
+	def from_json(json_post):
+		body = json_post.get('body')
+		if body is None or body == '':
+			raise ValidationError('post does not have a body')
+		return Post(body = body)
 
 db.event.listen(Post.body, 'set', Post.on_change_body)
 
