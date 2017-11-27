@@ -8,10 +8,11 @@ class Config:
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guss'
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
-	MAIL_SERVER = 'smtp.sina.com'  # 邮件服务器地址
-	MAIL_PORT = 25               # 邮件服务器端口
-	MAIL_USE_TLS = True          # 启用 TLS
-	# MAIL_USE_SSL = True          # 启用 TLS
+	MAIL_SERVER = 'smtp.qq.com'  # 邮件服务器地址
+	MAIL_DEBUG = True
+	MAIL_PORT = 465               # 邮件服务器端口
+	#MAIL_USE_TLS = True          # 启用 TLS
+	MAIL_USE_SSL = True          # 启用 TLS
 	MAIL_USERNAME = os.environ.get('FLASKY_MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('FLASKY_MAIL_PASSWORD')
 	FLASKY_MAIL_SENDER = os.environ.get('FLASKY_MAIL_USERNAME') or 'hqzmonte@sina.com'
