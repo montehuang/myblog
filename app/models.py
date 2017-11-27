@@ -285,6 +285,12 @@ class Post(db.Model):
 			db.session.commit()
 
 	@staticmethod
+	def clear_all_posts():
+		for a in Post.query.all():
+			db.session.delete(a)
+		db.session.commit()
+
+	@staticmethod
 	def on_change_body(target, value, oldValue, initiator):
 		allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
 						'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
