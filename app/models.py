@@ -119,6 +119,12 @@ class User(UserMixin, db.Model):
 
 		db.session.commit()
 
+	@staticmethod
+	def clear_all_users():
+		for user in User.query.all():
+			db.session.delete(user)
+		db.session.commit()
+		
 	def change_email(self, email):
 		if email is None:
 			return False
