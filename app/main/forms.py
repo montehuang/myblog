@@ -41,8 +41,10 @@ class EditProfileAdminForm(Form):
 			raise ValidationError('Username already in use.')
 
 class PostForm(FlaskForm):
-	body = PageDownField("What's on your mind", validators = [Required()])
-	submit = SubmitField('Submit')
+	body = PageDownField("博客内容", validators = [Required()])
+	title = StringField("博客标题")
+	edittime = StringField("编辑时间")
+	submit = SubmitField('提交')
 
 class CommentForm(FlaskForm):
 	body = PageDownField("", validators = [Required()])

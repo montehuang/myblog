@@ -4,6 +4,7 @@ from .. import db
 from . import main
 from ..models import User, Role, Permission, Post, Comment
 from flask_login import login_required, current_user
+from datetime import datetime
 from ..decorators import admin_required, permission_required
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from flask import render_template, session, redirect, url_for, current_app, abort, flash, request, make_response
@@ -27,7 +28,22 @@ def index():
 	pagination = query.order_by(Post.timestamp.desc()).paginate(
 		page, per_page = current_app.config['FLASK_POSTS_PER_PAGE'], error_out = False)
 	posts = pagination.items
-	return render_template('index.html', form=form, posts = posts, show_followed = show_followed, pagination = pagination)
+	return render_template('index.html', posts = posts, show_followed = show_followed, pagination = pagination)
+
+@main.route('/add_new_post', methods = ['GET', 'POST'])
+@login_required
+def add_new_post():
+	form = PostForm()
+	if current_user.can(Permission.WRITE_ARTICLE) and form.validate_on_submit():
+		final_edit_time = datetime.utcnow()
+		if form.edittime.data != "":
+			splittime = form.edittime.data.split("-")
+			if len(splittime) == 3:
+				final_edit_time = datetime(int(splittime[0]), int(splittime[1]), int(splittime[2]))
+		post = Post(body = form.body.data, author = current_user._get_current_object, timestamp = final_edit_time)
+		db.session.add(post)
+		return redirect(url_for('.index'))
+	return render_template('add_new_post.html', form = form)
 
 @main.route('/all')
 @login_required
