@@ -12,12 +12,7 @@ from flask import render_template, session, redirect, url_for, current_app, abor
 
 @main.route("/", methods = ['GET', 'POST'])
 def index():
-	form = PostForm()
 	page = request.args.get('page', 1, type = int)
-	if current_user.can(Permission.WRITE_ARTICLE) and form.validate_on_submit():
-		post = Post(body = form.body.data, author = current_user._get_current_object())
-		db.session.add(post)
-		return redirect(url_for('.index'))
 	show_followed = False
 	if current_user.is_authenticated:
 		show_followed = bool(request.cookies.get('show_followed', ''))
@@ -40,7 +35,7 @@ def add_new_post():
 			splittime = form.edittime.data.split("-")
 			if len(splittime) == 3:
 				final_edit_time = datetime(int(splittime[0]), int(splittime[1]), int(splittime[2]))
-		post = Post(body = form.body.data, author = current_user._get_current_object, timestamp = final_edit_time)
+		post = Post(body = form.body.data, title = form.title.data, author = current_user._get_current_object(), timestamp = final_edit_time)
 		db.session.add(post)
 		return redirect(url_for('.index'))
 	return render_template('add_new_post.html', form = form)
@@ -141,10 +136,20 @@ def edit_post(id):
 	form = PostForm()
 	if form.validate_on_submit():
 		post.body = form.body.data
+		post.title = form.title.data
+		final_edit_time = datetime.utcnow()
+		print(form.edittime.data)
+		if form.edittime.data != "":
+			splittime = form.edittime.data.split("-")
+			print(str(len(splittime)))
+			if len(splittime) == 3:
+				final_edit_time = datetime(int(splittime[0]), int(splittime[1]), int(splittime[2]))
+		post.timestamp = final_edit_time
 		db.session.add(post)
 		flash('The post has been updated.')
 		return redirect(url_for('.post', id = post.id))
 	form.body.data = post.body
+	form.title.data = post.title
 	return render_template('edit_post.html', form = form)
 
 @main.route('/follow/<username>')

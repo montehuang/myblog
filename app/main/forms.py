@@ -48,4 +48,4 @@ class PostForm(FlaskForm):
 
 class CommentForm(FlaskForm):
 	body = PageDownField("", validators = [Required()])
-	submit = SubmitField('Submit')
+	submit = SubmitField('提交')

@@ -99,6 +99,14 @@ class User(UserMixin, db.Model):
 		# 关注自己
 		self.followed.append(Follow(followed = self))
 
+
+	@staticmethod
+	def update_admin_role():
+		for user in User.query.all():
+			print(user.email)
+			if user.email == current_app.config['FLASKY_ADMIN']:
+				user.role = Role.query.filter_by(permission=0xff).first()
+
 	def to_json(self):
 		json_user = {
 			'url' : url_for('api.get_user', id = self.id, _external = True),
