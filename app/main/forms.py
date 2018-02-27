@@ -42,7 +42,8 @@ class EditProfileAdminForm(Form):
 
 class PostForm(FlaskForm):
 	body = PageDownField("博客内容", validators = [Required()])
-	title = StringField("博客标题")
+	title = StringField("博客标题", validators = [Required()])
+	brief = StringField("编辑简述", validators = [Required()])
 	edittime = StringField("编辑时间")
 	submit = SubmitField('提交')
 

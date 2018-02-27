@@ -35,7 +35,7 @@ def add_new_post():
 			splittime = form.edittime.data.split("-")
 			if len(splittime) == 3:
 				final_edit_time = datetime(int(splittime[0]), int(splittime[1]), int(splittime[2]))
-		post = Post(body = form.body.data, title = form.title.data, author = current_user._get_current_object(), timestamp = final_edit_time)
+		post = Post(body = form.body.data, title = form.title.data, brief = form.brief.data, author = current_user._get_current_object(), timestamp = final_edit_time)
 		db.session.add(post)
 		return redirect(url_for('.index'))
 	return render_template('add_new_post.html', form = form)
@@ -125,7 +125,7 @@ def post(id):
 	pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
 		page, per_page = current_app.config['FLASKY_COMMENTS_PER_PAGE'], error_out = False)
 	comments = pagination.items
-	return render_template('post.html', posts=[post], form = form, comments = comments, pagination = pagination)
+	return render_template('post.html', post=post, form = form, comments = comments, pagination = pagination)
 
 @main.route('/edit/<int:id>', methods = ['GET', 'POST'])
 def edit_post(id):
@@ -137,7 +137,8 @@ def edit_post(id):
 	if form.validate_on_submit():
 		post.body = form.body.data
 		post.title = form.title.data
-		final_edit_time = datetime.utcnow()
+		post.brief = form.brief.data
+		final_edit_time = form.edittime.data
 		print(form.edittime.data)
 		if form.edittime.data != "":
 			splittime = form.edittime.data.split("-")
@@ -150,7 +151,10 @@ def edit_post(id):
 		return redirect(url_for('.post', id = post.id))
 	form.body.data = post.body
 	form.title.data = post.title
-	return render_template('edit_post.html', form = form)
+	form.brief.data = post.brief
+	form.edittime.data = post.timestamp
+	tags = post.post_tags.all()
+	return render_template('edit_post.html', form = form, tags = tags)
 
 @main.route('/follow/<username>')
 @login_required

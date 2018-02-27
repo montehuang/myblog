@@ -277,11 +277,13 @@ class Post(db.Model):
 	__tablename__ = 'posts'
 	id = db.Column(db.Integer, primary_key = True)
 	title = db.Column(db.String(1000), unique = True)
+	brief = db.Column(db.String(2000))
 	body = db.Column(db.Text)
 	timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	body_html = db.Column(db.Text)
 	comments = db.relationship('Comment', backref = 'post', lazy = 'dynamic')
+	post_tags = db.relationship('PostTag', secondary=tag_post, backref=db.backref('post_tags', lazy="dynamic"), lazy="dynamic")
 
 	@staticmethod
 	def generate_posts(count = 100):
@@ -353,3 +355,13 @@ class Comment(db.Model):
 
 
 db.event.listen(Comment.body, 'set', Comment.on_change_body)
+
+class PostTag(db.Model):
+	__tablename__ = 'post_tags'
+	id = db.Column(db.Integer, primary_key = True)
+	body = db.Column(db.String(100), unique = True)
+
+tag_post = db.Table("tag_post",
+		db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),  
+    	db.Column('tag_id', db.Integer, db.ForeignKey('post_tags.id'), primary_key=True) 
+	)

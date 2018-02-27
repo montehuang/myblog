@@ -93,6 +93,9 @@ div.flask-pagedown-preview h2 {
 div.flask-pagedown-preview h3 {
     font-size: 120%;
 }
+#postTitle {
+    color: #007bff;
+}
 .post-body h1 {
     font-size: 140%;
 }
@@ -122,4 +125,27 @@ a:link, a:visited, a:hover, a:active {
 #navList {
     overflow: auto;
     margin-bottom: 10px;
+}
+.dateText {
+    font-size: 0.6em;
+    color: #aaaaaa;
+    line-height: 90%;
+    margin-top: 3px;
+}
+.labelTag {
+
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 2px 5px;
+    margin-left: 4px;
+    margin-right: 4px;
+    background: transparent;
+    line-height: 26px;
+}
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.1);
 }
