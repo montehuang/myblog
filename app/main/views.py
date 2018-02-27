@@ -138,8 +138,8 @@ def edit_post(id):
 		post.body = form.body.data
 		post.title = form.title.data
 		post.brief = form.brief.data
+		post.post_tags = form.tags.data
 		final_edit_time = form.edittime.data
-		print(form.edittime.data)
 		if form.edittime.data != "":
 			splittime = form.edittime.data.split("-")
 			print(str(len(splittime)))
@@ -153,8 +153,8 @@ def edit_post(id):
 	form.title.data = post.title
 	form.brief.data = post.brief
 	form.edittime.data = post.timestamp
-	tags = post.post_tags.all()
-	return render_template('edit_post.html', form = form, tags = tags)
+	form.tags.data = post.post_tags
+	return render_template('edit_post.html', form = form)
 
 @main.route('/follow/<username>')
 @login_required

@@ -273,6 +273,11 @@ login_manager.anonymous_user = AnonymousUser
 def load_user(user_id):
 	return User.query.get(int(user_id))
 
+tag_post = db.Table("tag_post",
+		db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),  
+		db.Column('tag_id', db.Integer, db.ForeignKey('post_tags.id'), primary_key=True) 
+	)
+
 class Post(db.Model):
 	__tablename__ = 'posts'
 	id = db.Column(db.Integer, primary_key = True)
@@ -360,8 +365,3 @@ class PostTag(db.Model):
 	__tablename__ = 'post_tags'
 	id = db.Column(db.Integer, primary_key = True)
 	body = db.Column(db.String(100), unique = True)
-
-tag_post = db.Table("tag_post",
-		db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),  
-    	db.Column('tag_id', db.Integer, db.ForeignKey('post_tags.id'), primary_key=True) 
-	)

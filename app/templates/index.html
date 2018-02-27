@@ -9,9 +9,8 @@
 {% block page_content %}
 <div class="tags">
 	<ul id="navList" class="list-unstyled list-inline">
-		<li><a id="allblogs" class="menu" href="http://www.cnblogs.com/">所有博客</a></li>
-		<li><a id="bookmarks" class="menu" href="http://www.cnblogs.com/kongxianghai/">书签</a></li>
-		<li><a id="about" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">关于</a></li>
+		<li><a id="allblogs" class="menu" href="{{ url_for('main.index') }}">所有博客</a></li>
+		<li><a id="about" class="menu" href="{{ url_for('.user', username = 'Monte') }}">关于</a></li>
 	</ul>
 </div>
 <div class="post-tabs">

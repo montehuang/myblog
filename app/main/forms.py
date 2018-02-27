@@ -1,8 +1,56 @@
 from flask_wtf import FlaskForm, Form
 from ..models import Role, User
 from flask_pagedown.fields import PageDownField
-from wtforms import StringField, SubmitField, TextAreaField, SelectField, BooleanField
+from wtforms import StringField, SubmitField, TextAreaField, SelectField, BooleanField, Field
 from wtforms.validators import Required, Length, Email, Regexp, ValidationError
+from wtforms.widgets import TextInput
+
+class TagListForm(Field):
+	widget = TextInput()
+
+	def __init__(self, label=None, validators=None, **kwargs):
+		super(TagListForm, self).__init__(label, validators, **kwargs)
+
+	def _value(self):
+		if self.data:
+			r = u'';
+			for obj in self.data:
+				r += self.obj_to_str(obj)
+			return r
+		else:
+			return u''
+
+	def process_formdata(self, valuelist):
+		if valuelist:
+			tags = self._remove_duplicates([x.strip() for x in valuelist[0].split(',')])
+			self.data = [self.str_to_obj(tag) for tag in tags]
+		else:
+			self.data = None
+
+	def pre_validate(self, form):
+		pass
+
+	@classmethod
+	def _remove_duplicates(cls, seq):
+		d = {}
+		for item in seq:
+			if item.lower() not in d:
+				d[item.lower()] = True
+				yield item
+
+	@classmethod
+	def str_to_obj(cls, tag):
+		tag_obj = Tag.query.filter(body=tag).first()
+		if tag_obj is None:
+			tag_obj = Tag(body=tag)
+		return tag_obj
+
+	@classmethod
+	def obj_to_str(cls, obj):
+		if obj:
+			return obj.body
+		else:
+			return u''
 
 class NameForm(Form):
 	name = StringField('What is your name?', validators = [Required()])
@@ -45,6 +93,7 @@ class PostForm(FlaskForm):
 	title = StringField("博客标题", validators = [Required()])
 	brief = StringField("编辑简述", validators = [Required()])
 	edittime = StringField("编辑时间")
+	tags = TagListForm(u'标签', validators=[Required()])
 	submit = SubmitField('提交')
 
 class CommentForm(FlaskForm):
