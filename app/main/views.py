@@ -162,6 +162,16 @@ def edit_post(id):
 	form.tags.data = post.post_tags
 	return render_template('edit_post.html', form = form)
 
+@main.route('/del_post/<int:id>', methods = ['GET', 'POST'])
+@login_required
+@permission_required(Permission.WRITE_ARTICLE)
+def del_post(id):
+	if id is not None:
+		post = Post.query.filter_by(id=id).first()
+		db.session.delete(post)
+		db.session.commit()
+		return redirect(url_for('.index'))
+
 @main.route('/follow/<username>')
 @login_required
 @permission_required(Permission.FOLLOW)

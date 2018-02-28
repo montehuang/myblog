@@ -53,4 +53,16 @@
 {% block scripts %}
 {{ super() }}
 {{ moment.include_moment() }}
+<script type="text/javascript" language="javascript"> 
+<!-- 
+function confirmAct() 
+{ 
+  if(confirm('确定删除这篇博客吗?')) 
+  { 
+    return true; 
+  } 
+  return false; 
+} 
+//-->
+</script> 
 {% endblock %}
