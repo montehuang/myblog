@@ -24,7 +24,7 @@
 						<span class="label label-default">详情</span>
 					</a>
 					<a href="{{ url_for('.post', id = post.id) }}#comments">
-						<span class="label label-primary">{{ post.comments.count() }} Comments</span>
+						<span class="label label-primary">{{ post.comments.count() }}评论</span>
 					</a>
 					{% if current_user == post.author %}
 					<a href="{{ url_for('.del_post', id = post.id) }}" onclick="return confirmAct();">
