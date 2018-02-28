@@ -74,6 +74,8 @@ class User(UserMixin, db.Model):
 	confirmed = db.Column(db.Boolean, default = False)
 	name = db.Column(db.String(64))
 	about_me = db.Column(db.Text())
+	all_info = db.Column(db.Text())
+	all_info_html = db.Column(db.Text())
 	location = db.Column(db.String(64))
 	member_since = db.Column(db.DateTime(), default = datetime.utcnow)
 	last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
@@ -259,6 +261,23 @@ class User(UserMixin, db.Model):
 				db.session.commit()
 			except IntegrityError:
 				db.session.rollback()
+
+	@staticmethod
+	def on_info_body(target, value, oldValue, initiator):
+		allowed_tags = ['a', 'img', 'abbr', 'acronym', 'b', 'hr' 'blockquote', 'code',
+						'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
+		attrs = {
+			'*': ['class'],
+			'a': ['href', 'rel'],
+			'img': ['src', 'alt'],
+			'hr':['*'],
+		}
+		print(markdown(value, output_format = 'html'))
+		target.all_info_html = bleach.linkify(bleach.clean(
+			markdown(value, output_format = 'html'), tags = allowed_tags, attributes=attrs, strip = True))
+
+
+db.event.listen(User.all_info, 'set', User.on_info_body)
 
 class AnonymousUser(AnonymousUserMixin):
 	def can(self, permission):

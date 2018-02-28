@@ -63,6 +63,10 @@ class EditProfileForm(Form):
 	about_me = TextAreaField('About me.')
 	submit = SubmitField('Submit')
 
+class NewEditProfileForm(Form):
+	all_info = PageDownField("博客内容", validators = [Required()])
+	submit = SubmitField("提交")
+
 class EditProfileAdminForm(Form):
 	email = StringField('Email', validators = (Required(), Length(1, 64), Email()))
 	username = StringField('Username', validators = (Required(), Length(1, 64), 
