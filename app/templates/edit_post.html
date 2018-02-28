@@ -17,7 +17,7 @@
          </div>
          <div class="tag-div">
 			{% for obj in form.tags.data %}
-				<span class="labelTag">obj.obj_to_str()</span>
+				<span class="labelTag">{{ obj.body }}</span>
 			{% endfor %}
          </div>
         <div class="form-group">

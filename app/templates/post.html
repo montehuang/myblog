@@ -11,7 +11,9 @@
 <div style="width:100%;">
     <h3>{{ post.title }}</h3>
     <p>标签
-        <span class="labelTag">python</span>
+        {% for tag in post.post_tags %}
+        <span class="labelTag">{{ tag.body }}</span>
+        {% endfor %}
     </p>
     <p class="dateText">日期 {{ moment(post.timestamp).format('L') }}</p>
     <div class="content">

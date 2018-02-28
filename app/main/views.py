@@ -2,7 +2,7 @@
 
 from .. import db
 from . import main
-from ..models import User, Role, Permission, Post, Comment
+from ..models import User, Role, Permission, Post, Comment, PostTag
 from flask_login import login_required, current_user
 from datetime import datetime
 from ..decorators import admin_required, permission_required
@@ -35,7 +35,13 @@ def add_new_post():
 			splittime = form.edittime.data.split("-")
 			if len(splittime) == 3:
 				final_edit_time = datetime(int(splittime[0]), int(splittime[1]), int(splittime[2]))
-		post = Post(body = form.body.data, title = form.title.data, brief = form.brief.data, author = current_user._get_current_object(), timestamp = final_edit_time)
+
+		for tag in form.tags.data:
+			postTag = PostTag.query.filter_by(body=tag.body).first()
+			if postTag is None:
+				db.session.add(tag)
+
+		post = Post(body = form.body.data, title = form.title.data, post_tags = form.tags.data, brief = form.brief.data, author = current_user._get_current_object(), timestamp = final_edit_time)
 		db.session.add(post)
 		return redirect(url_for('.index'))
 	return render_template('add_new_post.html', form = form)

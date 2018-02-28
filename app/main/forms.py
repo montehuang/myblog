@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm, Form
-from ..models import Role, User
+from ..models import Role, User, PostTag
 from flask_pagedown.fields import PageDownField
 from wtforms import StringField, SubmitField, TextAreaField, SelectField, BooleanField, Field
 from wtforms.validators import Required, Length, Email, Regexp, ValidationError
@@ -7,7 +7,7 @@ from wtforms.widgets import TextInput
 
 class TagListForm(Field):
 	widget = TextInput()
-
+	
 	def __init__(self, label=None, validators=None, **kwargs):
 		super(TagListForm, self).__init__(label, validators, **kwargs)
 
@@ -40,9 +40,9 @@ class TagListForm(Field):
 
 	@classmethod
 	def str_to_obj(cls, tag):
-		tag_obj = Tag.query.filter(body=tag).first()
+		tag_obj = PostTag.query.filter_by(body=tag).first()
 		if tag_obj is None:
-			tag_obj = Tag(body=tag)
+			tag_obj = PostTag(body=tag)
 		return tag_obj
 
 	@classmethod
@@ -51,6 +51,7 @@ class TagListForm(Field):
 			return obj.body
 		else:
 			return u''
+
 
 class NameForm(Form):
 	name = StringField('What is your name?', validators = [Required()])

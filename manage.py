@@ -1,6 +1,6 @@
 import os
 from app import create_app, db
-from app.models import Role, User, Permission, Post, Follow, Alembic
+from app.models import Role, User, Permission, Post, Follow, Alembic, PostTag, tag_post
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from tests.test_user_models import UserModelTestCase

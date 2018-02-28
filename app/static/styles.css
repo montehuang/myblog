@@ -39,7 +39,7 @@ div.post-content {
     min-height: 48px;
 }
 div.post-footer {
-    text-align: right;
+    text-align: left;
 }
 ul.comments {
     list-style-type: none;
