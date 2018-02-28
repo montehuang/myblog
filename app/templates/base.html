@@ -28,7 +28,7 @@
                 {% endif %}
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('auth.logout') }}">登出</a></li>
-                {% else %}
+                {% elif showLogin == True %}
                 <li><a href="{{ url_for('auth.login') }}">登录</a></li>
                 {% endif %}
             </ul>
