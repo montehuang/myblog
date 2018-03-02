@@ -15,11 +15,7 @@
          <div class="form-group  required">
              {{ form.brief(id="brief", class="form-control", placeholder=form.brief.label.text )}}
          </div>
-         <div class="tag-div">
-			{% for obj in form.tags.data %}
-				<span class="labelTag">{{ obj.body }}</span>
-			{% endfor %}
-         </div>
+        {{ form.tags(id="tags", class="form-control", placeholder=form.tags.label.text )}}
         <div class="form-group">
              <div class="row">
                  <div class="col-md-6">

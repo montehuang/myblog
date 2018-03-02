@@ -16,6 +16,7 @@ class TagListForm(Field):
 			r = u'';
 			for obj in self.data:
 				r += self.obj_to_str(obj)
+				r += ","
 			return r
 		else:
 			return u''
@@ -23,7 +24,7 @@ class TagListForm(Field):
 	def process_formdata(self, valuelist):
 		if valuelist:
 			tags = self._remove_duplicates([x.strip() for x in valuelist[0].split(',')])
-			self.data = [self.str_to_obj(tag) for tag in tags]
+			self.data = [self.str_to_obj(tag) for tag in tags if tag != ""]
 		else:
 			self.data = None
 
