@@ -333,10 +333,16 @@ class Post(db.Model):
 
 	@staticmethod
 	def on_change_body(target, value, oldValue, initiator):
-		allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+		allowed_tags = ['a', 'abbr', 'img', 'acronym', 'b', 'blockquote', 'code',
 						'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
+		attrs = {
+			'*': ['class'],
+			'a': ['href', 'rel'],
+			'img': ['src', 'alt'],
+			'hr':['*'],
+		}
 		target.body_html = bleach.linkify(bleach.clean(
-			markdown(value, output_format = 'html'), tags = allowed_tags, strip = True))
+			markdown(value, output_format = 'html'), tags = allowed_tags, attributes=attrs, strip = True))
 
 	# 转化成json
 	def to_json(self):
