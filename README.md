@@ -1,5 +1,3 @@
-## 网站站点：[http://www.monteblog.top/](http://www.monteblog.top/)
-
 Python 后端框架：`Flask`
 
 前端框架：`Bootstrap`
